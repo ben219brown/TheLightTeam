@@ -759,20 +759,25 @@ Who canceled all those waves of sin- and towed my "sorry vessel" in!</div>
     <div class="section-head" data-reveal>
       <p class="eyebrow">Membership</p>
       <h2>Take the pledge.</h2>
-      <p>The only requirement to join The Light Team is this pledge. Fill it out below and we'll follow up personally.</p>
+      <p>The only requirement to join is this simple pledge. Fill it out below to get started.</p>
     </div>
-    <form class="contact-form" data-reveal data-subject="Light Team — Pledge Submission" data-note="I'd like to take the Light Team pledge and join as a member.">
+    
+    <!-- 
+      Suggestion 1: For a functional backend without coding, 
+      change the action to: action="https://formspree.io/f/YOUR_ID_HERE" 
+    -->
+    <form class="contact-form" id="pledgeForm" method="POST" action="https://formspree.io/f/mqpznoen" data-reveal>
       <div class="form-row">
-        <label>Full name<input type="text" name="name" required></label>
-        <label>Church / group (optional)<input type="text" name="church"></label>
+        <label>Full name <input type="text" name="name" required></label>
+        <label>Church (optional) <input type="text" name="church"></label>
       </div>
       <div class="form-row">
-        <label>Email<input type="email" name="email" required></label>
-        <label>Phone (optional)<input type="tel" name="phone"></label>
+        <label>Email <input type="email" name="email" required></label>
+        <label>Phone <input type="tel" name="phone"></label>
       </div>
-      <label>Anything you'd like us to know<textarea name="message" rows="3" placeholder="Skills, availability, questions..."></textarea></label>
-      <button type="submit" class="btn btn-primary" style="color:var(--night);">Send my pledge →</button>
-      <p class="form-note">Opens your email client with this filled in, addressed to the team.</p>
+      <label>Notes <textarea name="message" rows="3"></textarea></label>
+      <button type="submit" class="btn btn-primary">Send my pledge →</button>
+      <div class="form-success-msg" id="formSuccess">Thank you! Your pledge has been sent to the team. We will reach out shortly.</div>
     </form>
   </div>
 </section>
