@@ -179,19 +179,6 @@
     transition: opacity 0.1s linear;
   }
 
-  .sky-glow {
-    position: absolute;
-    left: 50%;
-    /* Now uses the same starting position as the sun */
-    bottom: 24%; 
-    width: 900px;
-    height: 900px;
-    transform: translateX(-50%);
-    background: radial-gradient(circle, rgba(246,207,135,0.6) 0%, rgba(246,207,135,0.2) 35%, rgba(246,207,135,0) 65%);
-    pointer-events: none;
-    z-index: 2;
-  }
-
   .sun {
     position: absolute;
     left: 50%;
@@ -201,7 +188,7 @@
     border-radius: 50%;
     transform: translateX(-50%);
     background: radial-gradient(circle at 40% 35%, #fff3d6, var(--dawn) 70%);
-    box-shadow: 0 0 80px 20px rgba(231,154,52,0.55);
+    box-shadow: 0 0 100px 40px rgba(231,154,52,0.4); 
     z-index: 3;
     /* Remove the old CSS transition to let JS handle it smoothly */
   }
@@ -363,17 +350,38 @@
   }
 
   /* doctrine */
-  .doctrine-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:28px 48px;}
-  .doctrine-item{border-top:1px solid var(--line);padding-top:16px;}
-  .doctrine-item h3{font-size:1rem;font-weight:700;margin-bottom:6px;}
-  .doctrine-item p{font-size:0.92rem;color:rgba(34,29,22,0.68);}
-  @media (max-width:700px){.doctrine-grid{grid-template-columns:1fr;}}
-  .doctrine-more{margin-top:32px;}
-  .link-arrow{
-    display:inline-flex;align-items:center;gap:8px;
-    font-family:'JetBrains Mono',monospace;font-size:0.78rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;
-    color:var(--night-2);
-    border-bottom:1px solid var(--dawn);padding-bottom:3px;
+  .doctrine-grid {
+    display: grid;
+    /* 2 columns on desktop, 1 on mobile */
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 40px 60px;
+    margin-top: 48px;
+  }
+
+  .doctrine-item {
+    border-top: 1px solid var(--line);
+    padding-top: 20px;
+  }
+
+  .doctrine-item h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--night);
+  }
+
+  .doctrine-item p {
+    font-size: 0.95rem;
+    color: rgba(34, 29, 22, 0.7);
+    line-height: 1.5;
+  }
+
+  /* Responsive fix for smaller screens */
+  @media (max-width: 768px) {
+    .doctrine-grid {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
   }
   
   /* ---------- EVENTS ---------- */
@@ -613,7 +621,6 @@
 
 <section class="hero">
   <div class="stars" id="stars"></div>
-  <div class="sky-glow"></div>
   <div class="sun" id="sun"></div>
   <svg class="ridge" viewBox="0 0 1440 260" preserveAspectRatio="none">
     <path class="ridge-back" d="M0,140 L120,90 L260,150 L420,70 L600,130 L760,60 L940,120 L1120,80 L1300,150 L1440,100 L1440,260 L0,260 Z"/>
@@ -848,28 +855,48 @@ Who canceled all those waves of sin- and towed my "sorry vessel" in!</div>
 
 <div class="horizon-divider"></div>
 
-<section>
+<section id="beliefs">
   <div class="wrap">
     <div class="section-head" data-reveal>
       <p class="eyebrow">What we believe</p>
       <h2>A short doctrinal statement.</h2>
       <p>Every member congregation and volunteer shares this common ground.</p>
     </div>
+    
     <div class="doctrine-grid" data-reveal>
-      <div class="doctrine-item"><h3>Scripture</h3><p>The Holy Bible is the inspired, infallible, authoritative Word of God.</p></div>
-      <div class="doctrine-item"><h3>The Trinity</h3><p>One God, eternally existent in three persons — Father, Son, and Holy Spirit.</p></div>
-      <div class="doctrine-item"><h3>Creation</h3><p>God is the creator of all things in heaven and on earth, through Him and for Him.</p></div>
-      <div class="doctrine-item"><h3>Christ</h3><p>His deity, virgin birth, sinless life, atoning death, bodily resurrection, and coming return.</p></div>
-      <div class="doctrine-item"><h3>Salvation</h3><p>Regeneration by the Holy Spirit is essential for salvation.</p></div>
-      <div class="doctrine-item"><h3>Unity</h3><p>Believers in Christ share one spiritual unity, across every congregation.</p></div>
-    </div>
-    <details id="statement-more" style="margin-top:8px;">
-      <summary class="link-arrow" style="margin-top:8px;">Read the full statement</summary>
-      <div class="doctrine-grid" style="margin-top:28px;">
-        <div class="doctrine-item"><h3>The Holy Spirit</h3><p>His present ministry indwells the Christian, enabling a godly life.</p></div>
-        <div class="doctrine-item"><h3>Resurrection</h3><p>Both the saved and the lost will be resurrected — one to life, one to judgment.</p></div>
+      <div class="doctrine-item">
+        <h3>Scripture</h3>
+        <p>The Holy Bible is the inspired, infallible, authoritative Word of God.</p>
       </div>
-    </details>
+      <div class="doctrine-item">
+        <h3>The Trinity</h3>
+        <p>One God, eternally existent in three persons — Father, Son, and Holy Spirit.</p>
+      </div>
+      <div class="doctrine-item">
+        <h3>Creation</h3>
+        <p>God is the creator of all things in heaven and on earth, through Him and for Him.</p>
+      </div>
+      <div class="doctrine-item">
+        <h3>Christ</h3>
+        <p>His deity, virgin birth, sinless life, atoning death, bodily resurrection, and coming return.</p>
+      </div>
+      <div class="doctrine-item">
+        <h3>Salvation</h3>
+        <p>Regeneration by the Holy Spirit is essential for salvation.</p>
+      </div>
+      <div class="doctrine-item">
+        <h3>Unity</h3>
+        <p>Believers in Christ share one spiritual unity, across every congregation.</p>
+      </div>
+      <div class="doctrine-item">
+        <h3>The Holy Spirit</h3>
+        <p>His present ministry indwells the Christian, enabling a godly life.</p>
+      </div>
+      <div class="doctrine-item">
+        <h3>Resurrection</h3>
+        <p>Both the saved and the lost will be resurrected — one to life, one to judgment.</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -969,7 +996,7 @@ Who canceled all those waves of sin- and towed my "sorry vessel" in!</div>
       <h4>Contact</h4>
       <p>Meyersdale, PA 15552, US</p>
       <p><a href="tel:8144442654">814-444-2654</a></p>
-      <p style="margin-top:14px;"><a href="https://www.facebook.com/The-Light-Team-109814937233479/" target="_blank" rel="noopener">Facebook →</a></p>
+      <p style="margin-top:14px;"><a href="https://www.facebook.com/TheLightTeamMeyersdale/" target="_blank" rel="noopener">Facebook →</a></p>
     </div>
   </div>
 
@@ -1033,8 +1060,7 @@ Who canceled all those waves of sin- and towed my "sorry vessel" in!</div>
     starsEl.appendChild(s);
   }
 
-   const sun = document.getElementById('sun');
-  const skyGlow = document.querySelector('.sky-glow');
+  const sun = document.getElementById('sun');
   const hero = document.querySelector('.hero');
   const starsContainer = document.getElementById('stars');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
