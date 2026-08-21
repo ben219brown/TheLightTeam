@@ -56,7 +56,7 @@
 
   /* ---------- NAV ---------- */
   header{
-    position:fixed;top:0;left:0;right:0;z-index:50;
+    position:fixed;top:0;left:0;right:0;z-index:100;
     padding:20px 0;
     transition:background 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease;
   }
@@ -72,9 +72,11 @@
     font-family:'Fraunces',serif;font-weight:700;font-size:1.05rem;
     color:var(--paper);
     transition:color 0.3s ease;
+    z-index: 110; /* Keep brand above mobile menu */
   }
   header.scrolled .brand{color:var(--ink);}
   .brand-mark{width:20px;height:20px;flex-shrink:0;}
+  
   nav ul{display:flex;gap:32px;list-style:none;}
   nav a{
     font-family:'JetBrains Mono',monospace;
@@ -86,18 +88,76 @@
   }
   header.scrolled nav a{color:var(--ink);}
   nav a:hover{opacity:1;border-color:var(--dawn);}
+
+  /* Mobile Nav Toggle Button */
+  .nav-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 24px;
+    height: 18px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 110;
+  }
+  .nav-toggle span {
+    width: 100%;
+    height: 2px;
+    background-color: var(--paper);
+    transition: all 0.3s ease;
+  }
+  header.scrolled .nav-toggle span { background-color: var(--ink); }
+
+  @media (max-width:760px){
+    .nav-toggle { display: flex; }
+    
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: var(--night);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    nav.mobile-active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    nav ul {
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+    }
+
+    nav a {
+      font-size: 1.2rem;
+      color: var(--paper) !important;
+    }
+
+    .nav-phone { display: none; }
+
+    /* Hamburger Animation to 'X' */
+    .nav-toggle.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); background-color: var(--paper); }
+    .nav-toggle.active span:nth-child(2) { opacity: 0; }
+    .nav-toggle.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); background-color: var(--paper); }
+  }
+
   .nav-phone{
     font-family:'JetBrains Mono',monospace;font-size:0.78rem;font-weight:600;
     color:var(--paper);opacity:0.9;
     transition:color 0.3s ease;
   }
   header.scrolled .nav-phone{color:var(--ink);}
-  .nav-toggle{display:none;}
-
-  @media (max-width:760px){
-    nav ul{display:none;}
-    .nav-phone{display:none;}
-  }
 
   /* ---------- HERO ---------- */
   .hero{
@@ -490,7 +550,15 @@
       <svg class="brand-mark" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" fill="currentColor" opacity="0.9"/><g stroke="currentColor" stroke-width="1.4"><line x1="12" y1="1" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="23"/><line x1="1" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="23" y2="12"/><line x1="4.2" y1="4.2" x2="6.3" y2="6.3"/><line x1="17.7" y1="17.7" x2="19.8" y2="19.8"/><line x1="4.2" y1="19.8" x2="6.3" y2="17.7"/><line x1="17.7" y1="6.3" x2="19.8" y2="4.2"/></g></svg>
       The Light Team
     </a>
-    <nav>
+
+    <!-- Mobile Toggle Button -->
+    <button class="nav-toggle" id="mobileToggle">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <nav id="siteNav">
       <ul>
         <li><a href="#about">About</a></li>
         <li><a href="#events">Events</a></li>
@@ -796,14 +864,8 @@ Who canceled all those waves of sin- and towed my "sorry vessel" in!</div>
       <p>The only requirement to join is this simple pledge. Fill it out below to get started.</p>
     </div>
     
-    <!-- 
-      Suggestion 1: For a functional backend without coding, 
-      change the action to: action="https://formspree.io/f/YOUR_ID_HERE" 
-    -->
     <form class="contact-form" id="pledgeForm" method="POST" action="https://formspree.io/f/mqpznoen" data-reveal>
-
        <input type="hidden" name="_subject" value="Light Team — Membership Inquiry">
-      
       <div class="form-row">
         <label>Full name <input type="text" name="name" required></label>
         <label>Church (optional) <input type="text" name="church"></label>
@@ -874,34 +936,14 @@ Who canceled all those waves of sin- and towed my "sorry vessel" in!</div>
   <div class="contact-box" data-reveal>
     <h4 style="margin-bottom:6px;">Send us a message</h4>
     <p style="margin-bottom:24px;">We read every message personally — usually within a couple of days.</p>
-    
-    <!-- Updated Formspree implementation -->
-    <form 
-      class="contact-form contact-form-dark" 
-      action="https://formspree.io/f/myegoapo" 
-      method="POST"
-    >
-      <!-- This hidden field sets the email subject line in your inbox -->
+    <form class="contact-form contact-form-dark" action="https://formspree.io/f/myegoapo" method="POST">
       <input type="hidden" name="_subject" value="Light Team — Website Inquiry">
-
       <div class="form-row">
-        <label>Name
-          <input type="text" name="name" required>
-        </label>
-        <label>Email
-          <input type="email" name="email" required>
-        </label>
+        <label>Name <input type="text" name="name" required></label>
+        <label>Email <input type="email" name="email" required></label>
       </div>
-      
-      <label>Message
-        <textarea name="message" rows="4" required placeholder="How can we help?"></textarea>
-      </label>
-
-      <button type="submit" class="btn btn-primary" style="color:var(--night);">
-        Send message →
-      </button>
-      
-      <!-- Removed the "Opens email client" note since it now sends directly -->
+      <label>Message <textarea name="message" rows="4" required placeholder="How can we help?"></textarea></label>
+      <button type="submit" class="btn btn-primary" style="color:var(--night);">Send message →</button>
     </form>
   </div>
 </div>
@@ -913,6 +955,27 @@ Who canceled all those waves of sin- and towed my "sorry vessel" in!</div>
 </footer>
 
 <script>
+  // Mobile Toggle Script
+  const mobileToggle = document.getElementById('mobileToggle');
+  const siteNav = document.getElementById('siteNav');
+  const navLinks = document.querySelectorAll('#siteNav a');
+
+  mobileToggle.addEventListener('click', () => {
+    mobileToggle.classList.toggle('active');
+    siteNav.classList.toggle('mobile-active');
+    // Prevent scrolling when menu is open
+    document.body.style.overflow = siteNav.classList.contains('mobile-active') ? 'hidden' : 'auto';
+  });
+
+  // Close menu when a link is clicked
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      mobileToggle.classList.remove('active');
+      siteNav.classList.remove('mobile-active');
+      document.body.style.overflow = 'auto';
+    });
+  });
+
   // header background on scroll
   const header = document.getElementById('siteHeader');
   window.addEventListener('scroll', () => {
@@ -929,7 +992,7 @@ Who canceled all those waves of sin- and towed my "sorry vessel" in!</div>
     starsEl.appendChild(s);
   }
 
-  // sun rises slightly on scroll (parallax), respecting reduced motion
+  // sun rises slightly on scroll (parallax)
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const sun = document.getElementById('sun');
   if(!reduce){
