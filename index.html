@@ -160,34 +160,75 @@
   header.scrolled .nav-phone{color:var(--ink);}
 
   /* ---------- HERO ---------- */
-  .hero{
-    position:relative;
-    height:100vh;
-    min-height:640px;
-    overflow:hidden;
-    background:linear-gradient(180deg, var(--night) 0%, var(--night-2) 45%, #6b5a4a 78%, var(--dawn) 100%);
+.hero {
+    position: relative;
+    height: 100vh;
+    min-height: 640px;
+    overflow: hidden;
+    background: #161c33; 
+    z-index: 1; /* Establishes a container for the layers */
   }
-  .sky-glow{
-    position:absolute;left:50%;bottom:18%;
-    width:900px;height:900px;
-    transform:translateX(-50%);
-    background:radial-gradient(circle, rgba(246,207,135,0.55) 0%, rgba(246,207,135,0.18) 35%, rgba(246,207,135,0) 65%);
-    pointer-events:none;
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, #4a5a7c 0%, #e79a34 100%);
+    opacity: var(--sky-alpha, 0);
+    z-index: 0; /* Moves it in front of the dark background */
+    transition: opacity 0.1s linear;
   }
-  .sun{
-    position:absolute;left:50%;bottom:24%;
-    width:120px;height:120px;border-radius:50%;
-    transform:translateX(-50%);
-    background:radial-gradient(circle at 40% 35%, #fff3d6, var(--dawn) 70%);
-    box-shadow:0 0 80px 20px rgba(231,154,52,0.55);
-    transition:bottom 1.2s ease;
+
+  .sky-glow {
+    position: absolute;
+    left: 50%;
+    /* Now uses the same starting position as the sun */
+    bottom: 24%; 
+    width: 900px;
+    height: 900px;
+    transform: translateX(-50%);
+    background: radial-gradient(circle, rgba(246,207,135,0.6) 0%, rgba(246,207,135,0.2) 35%, rgba(246,207,135,0) 65%);
+    pointer-events: none;
+    z-index: 2;
   }
-  .stars{position:absolute;inset:0;}
+
+  .sun {
+    position: absolute;
+    left: 50%;
+    bottom: 24%;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    transform: translateX(-50%);
+    background: radial-gradient(circle at 40% 35%, #fff3d6, var(--dawn) 70%);
+    box-shadow: 0 0 80px 20px rgba(231,154,52,0.55);
+    z-index: 3;
+    /* Remove the old CSS transition to let JS handle it smoothly */
+  }
+
+  .stars { 
+    position: absolute; 
+    inset: 0; 
+    z-index: 1; 
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 10; /* Keep text above the sky transitions */
+  }
   .stars span{
     position:absolute;width:3px;height:3px;border-radius:50%;
     background:rgba(251,246,236,0.8);
   }
-  .ridge{position:absolute;left:0;right:0;bottom:0;width:100%;}
+.ridge {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: 4; /* Higher than the sun (3) and sky (0) */
+  }
+  
   .ridge-back{fill:var(--ridge);opacity:0.55;}
   .ridge-front{fill:#241f1a;}
 
@@ -992,15 +1033,33 @@ Who canceled all those waves of sin- and towed my "sorry vessel" in!</div>
     starsEl.appendChild(s);
   }
 
-  // sun rises slightly on scroll (parallax)
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const sun = document.getElementById('sun');
-  if(!reduce){
-    window.addEventListener('scroll', () => {
-      const y = Math.min(window.scrollY, 500);
-      sun.style.bottom = (24 + y*0.04) + '%';
-    });
-  }
+   const sun = document.getElementById('sun');
+  const skyGlow = document.querySelector('.sky-glow');
+  const hero = document.querySelector('.hero');
+  const starsContainer = document.getElementById('stars');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  window.addEventListener('scroll', () => {
+    // 1. Calculate how far we've scrolled (0 to 500px)
+    const scrollVal = window.scrollY;
+    const maxScroll = 500;
+    const scrollPercent = Math.min(scrollVal / maxScroll, 1);
+
+    if (!reduceMotion) {
+      // 2. Move Sun and Glow together (Lockstep)
+      const newBottom = 24 + (scrollPercent * 15); 
+      sun.style.bottom = newBottom + '%';
+      skyGlow.style.bottom = newBottom + '%'; // Offset slightly for centering
+
+      // 3. Fade in the Morning Sky
+      // We use a CSS variable or direct opacity on the ::before pseudo-element
+      // Since we can't target ::before in JS easily, we update the hero background
+      hero.style.setProperty('--sky-alpha', scrollPercent);
+    }
+    
+    // 4. Fade out the Stars as it gets brighter
+    starsContainer.style.opacity = 1 - (scrollPercent * 1.5);
+  });
 
   // reveal-on-scroll
   const revealEls = document.querySelectorAll('[data-reveal]');
