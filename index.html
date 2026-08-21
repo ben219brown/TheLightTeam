@@ -833,21 +833,41 @@ Who canceled all those waves of sin- and towed my "sorry vessel" in!</div>
     </div>
   </div>
 
-  <div class="wrap" style="padding-bottom:56px;">
-    <div class="contact-box" data-reveal>
-      <h4 style="margin-bottom:6px;">Send us a message</h4>
-      <p style="margin-bottom:24px;">We read every message personally — usually within a couple of days.</p>
-      <form class="contact-form contact-form-dark" data-subject="Light Team — Website Inquiry" data-note="">
-        <div class="form-row">
-          <label>Name<input type="text" name="name" required></label>
-          <label>Email<input type="email" name="email" required></label>
-        </div>
-        <label>Message<textarea name="message" rows="4" required placeholder="How can we help?"></textarea></label>
-        <button type="submit" class="btn btn-primary" style="color:var(--night);">Send message →</button>
-        <p class="form-note">Opens your email client, addressed to the team, with this filled in.</p>
-      </form>
-    </div>
+ <div class="wrap" style="padding-bottom:56px;">
+  <div class="contact-box" data-reveal>
+    <h4 style="margin-bottom:6px;">Send us a message</h4>
+    <p style="margin-bottom:24px;">We read every message personally — usually within a couple of days.</p>
+    
+    <!-- Updated Formspree implementation -->
+    <form 
+      class="contact-form contact-form-dark" 
+      action="https://formspree.io/f/myegoapo" 
+      method="POST"
+    >
+      <!-- This hidden field sets the email subject line in your inbox -->
+      <input type="hidden" name="_subject" value="Light Team — Website Inquiry">
+
+      <div class="form-row">
+        <label>Name
+          <input type="text" name="name" required>
+        </label>
+        <label>Email
+          <input type="email" name="email" required>
+        </label>
+      </div>
+      
+      <label>Message
+        <textarea name="message" rows="4" required placeholder="How can we help?"></textarea>
+      </label>
+
+      <button type="submit" class="btn btn-primary" style="color:var(--night);">
+        Send message →
+      </button>
+      
+      <!-- Removed the "Opens email client" note since it now sends directly -->
+    </form>
   </div>
+</div>
 
   <div class="wrap footer-bottom">
     <span>© 2026 The Light Team</span>
