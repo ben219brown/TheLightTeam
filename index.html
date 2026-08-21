@@ -165,32 +165,41 @@
     height: 100vh;
     min-height: 640px;
     overflow: hidden;
-    background: #161c33; 
-    z-index: 1; /* Establishes a container for the layers */
+    background-color: #161c33; /* The base Night color */
+    z-index: 1; 
   }
 
   .hero::before {
     content: '';
     position: absolute;
     inset: 0;
+    /* The Sunrise Gradient */
     background: linear-gradient(180deg, #4a5a7c 0%, #e79a34 100%);
-    opacity: var(--sky-alpha, 0);
-    z-index: 0; /* Moves it in front of the dark background */
+    /* This connects to the JS property we set above */
+    opacity: var(--sky-alpha, 0); 
+    z-index: -1; /* This sits ON TOP of the background-color but behind the sun/mountains */
     transition: opacity 0.1s linear;
   }
+  
+  /* Ensure mountains stay in front of everything */
+  .ridge {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    width: 100%;
+    z-index: 5; 
+  }
 
+  /* Ensure sun is behind mountains but in front of sky */
   .sun {
     position: absolute;
     left: 50%;
     bottom: 24%;
-    width: 120px;
-    height: 120px;
+    width: 120px; height: 120px;
     border-radius: 50%;
     transform: translateX(-50%);
     background: radial-gradient(circle at 40% 35%, #fff3d6, var(--dawn) 70%);
     box-shadow: 0 0 100px 40px rgba(231,154,52,0.4); 
     z-index: 3;
-    /* Remove the old CSS transition to let JS handle it smoothly */
   }
 
   .stars { 
@@ -1060,30 +1069,26 @@ Who canceled all those waves of sin- and towed my "sorry vessel" in!</div>
     starsEl.appendChild(s);
   }
 
-  const sun = document.getElementById('sun');
+ const sun = document.getElementById('sun');
   const hero = document.querySelector('.hero');
   const starsContainer = document.getElementById('stars');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   window.addEventListener('scroll', () => {
-    // 1. Calculate how far we've scrolled (0 to 500px)
     const scrollVal = window.scrollY;
     const maxScroll = 500;
     const scrollPercent = Math.min(scrollVal / maxScroll, 1);
 
     if (!reduceMotion) {
-      // 2. Move Sun and Glow together (Lockstep)
+      // Move Sun
       const newBottom = 24 + (scrollPercent * 15); 
       sun.style.bottom = newBottom + '%';
-      skyGlow.style.bottom = newBottom + '%'; // Offset slightly for centering
 
-      // 3. Fade in the Morning Sky
-      // We use a CSS variable or direct opacity on the ::before pseudo-element
-      // Since we can't target ::before in JS easily, we update the hero background
+      // Update Sky Opacity (The Daylight Fade)
       hero.style.setProperty('--sky-alpha', scrollPercent);
     }
     
-    // 4. Fade out the Stars as it gets brighter
+    // Fade out the Stars
     starsContainer.style.opacity = 1 - (scrollPercent * 1.5);
   });
 
